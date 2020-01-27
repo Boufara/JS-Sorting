@@ -15,6 +15,7 @@
         <label><input name="radio" type="radio" id="quick" checked>Quick</label>
         <label><input name="radio" type="radio" id="decrease">Decrease</label>
         <input type="button" value="Sort" onclick="Sort()">
+        <p id="time">Time : 0ms</p>
     </section>
 	
 	<script type="text/javascript">
@@ -23,7 +24,9 @@
 		
 		function Generate(){
 			myArray = [3, 0, 2, 5, -1, 4, 1, -7];
-			
+			for (var i = 1000; i >= 0; i--) {
+				myArray.push(i);
+			}
 			Print(myArray);
 		}
 
@@ -36,10 +39,14 @@
 		}
 
 		function Sort(){
+			var time = Date.now();
+
 			if (document.getElementById("quick").checked)
 				Print(QuickSort(myArray));
 			else if (document.getElementById("decrease").checked)
 				Print(DecreaseSort(myArray));
+
+			document.getElementById("time").innerHTML = "Time : " + (time - Date.now()) + "ms"
 		}
 
 		function QuickSort(arr){
