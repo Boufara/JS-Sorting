@@ -8,14 +8,15 @@
 
     <h1>Sorting - JavaScript</h1>
 	<section>
-        <table>
-            <tr id="tr"></tr>
-        </table>
         <input type="button" value="Generate" onclick="Generate()">
         <label><input name="radio" type="radio" id="quick" checked>Quick</label>
         <label><input name="radio" type="radio" id="decrease">Decrease</label>
         <input type="button" value="Sort" onclick="Sort()">
-        <p id="time">Time : 0ms</p>
+        <span id="time">Sorting test 0/500 : <b>0ms</b></span>
+        <input type="button" value="Speed average" onclick="Test()">
+        <table>
+            <tr id="tr" class="flex"></tr>
+        </table>
     </section>
 	
 	<script type="text/javascript">
@@ -24,9 +25,9 @@
 		
 		function Generate(){
 			myArray = [3, 0, 2, 5, -1, 4, 1, -7];
-			for (var i = 1000; i >= 0; i--) {
+			for (var i = 1000; i >= 0; i--)
 				myArray.push(i);
-			}
+
 			Print(myArray);
 		}
 
@@ -45,8 +46,28 @@
 				Print(QuickSort(myArray));
 			else if (document.getElementById("decrease").checked)
 				Print(DecreaseSort(myArray));
+		}
 
-			document.getElementById("time").innerHTML = "Time : " + (time - Date.now()) + "ms"
+		function Test(){
+
+			for (var i = 0, total = 0, moyenne = 0; i < 500; i++) 
+			{
+				Generate();
+
+				if (document.getElementById("quick").checked){
+					var time = Date.now();
+					Print(QuickSort(myArray));
+					total += Date.now() - time;
+					document.getElementById("time").innerHTML = "<b>Quick</b> sorting test " + (i + 1) + "/500 : <b>" + total / (i + 1) + "ms</b>";
+				}
+
+				else if (document.getElementById("decrease").checked){
+					var time = Date.now();
+					Print(DecreaseSort(myArray));
+					total += Date.now() - time;
+					document.getElementById("time").innerHTML = "<b>Decrease</b> sorting test " + (i + 1) + "/500 : <b>" + total / (i + 1) + "ms</b>";
+				}
+			}
 		}
 
 		function QuickSort(arr){

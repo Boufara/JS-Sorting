@@ -5,6 +5,11 @@ body{
     font-family: roboto;
 }
 
+.flex{
+    display: flex;
+    flex-wrap: wrap;
+}
+
 h1{
     margin: 20px;
     font-size: 2.4em;
@@ -17,7 +22,7 @@ input[type="button"]{
     background-color: rgba(80, 80, 80, 0.5);
     color: white;
     font-size: 18px;
-    width: 120px;
+    min-width: 120px;
     height: 50px;
 }
 
@@ -44,6 +49,8 @@ table{
 table td{
     border: 1px dashed black;
     border-radius: 4px;
-    padding: 24px;
-    margin-right: 20px;
+    padding: 20px;
+    margin: 5px;
+    min-width: 32px;
+    text-align: center;
 }
