@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<title></title>
+</head>
+<body>
+
+    <h1>Sorting - JavaScript</h1>
+	<section>
+        <table>
+            <tr id="tr"></tr>
+        </table>
+        <input type="button" value="Generate" onclick="Generate()">
+        <label><input name="radio" type="radio" id="quick" checked>Quick</label>
+        <label><input name="radio" type="radio" id="decrease">Decrease</label>
+        <input type="button" value="Sort" onclick="Sort()">
+    </section>
+	
+	<script type="text/javascript">
+
+		var myArray = [];
+		
+		function Generate(){
+			myArray = [3, 0, 2, 5, -1, 4, 1, -7];
+			
+			Print(myArray);
+		}
+
+		function Print(arr){
+			var value = "";
+			for(var i = 0; i < arr.length; i++)
+				value += "<td>" + arr[i] + "</td>";
+
+			document.getElementById("tr").innerHTML = value;
+		}
+
+		function Sort(){
+			if (document.getElementById("quick").checked)
+				Print(QuickSort(myArray));
+			else if (document.getElementById("decrease").checked)
+				Print(DecreaseSort(myArray));
+		}
+
+		function QuickSort(arr){
+
+			if (arr.length <= 1) return arr;
+			
+			else{
+				var left = [];
+				var right = [];
+				var lastArray = [];
+				var pivot = arr.pop();
+				var length = arr.length;
+
+				for (var i = 0; i < length; i++)
+					if (arr[i] <= pivot)
+						left.push(arr[i]);
+					else
+						right.push(arr[i]);
+			}
+
+			return lastArray.concat(QuickSort(left), pivot, QuickSort(right));
+		}
+
+		function DecreaseSort(arr, start = 0, end = arr.length - 1){
+			if (arr.length <= 0) return arr; // Si le tableau est vide
+
+			else {
+				var min = max = arr[start]; // initialiser min et max avec le 1er element
+				var i_min = i_max = start;  // initialiser leurs indexs avec l'index du 1er element
+
+				for (var i = start; i <= end; i++) { // Chaque appel sur cette fonction, start et end s'approche du centre pour diminuer l'espace de recherche
+					if (arr[i] <= min){	// Si on obtiens un element plus petit
+						min = arr[i]; // On le prend comme le nouveau min
+						i_min = i; // Obtenir sa position
+					}
+
+					else if (arr[i] >= max){ // Même chose avec les max
+						max = arr[i];
+						i_max = i;
+					}
+				}
+
+				Swap(arr, start, i_min); // On echange dans l'arr le min avec le 1er element
+				Swap(arr, end, i_max);   // On echange dans l'arr le max avec le dernier element
+
+				if (start < Math.floor(arr.length / 2) && end > Math.floor(arr.length / 2)) // Si on est pas encore dans le milieu
+					DecreaseSort(arr, ++start, --end); // Appel recursive de la fonction en diminuant l'espace de recherche
+
+				return arr;
+			}
+		}
+
+		function Swap(arr, i, j){
+			var swap = arr[i];
+			arr[i] = arr[j];
+			arr[j] = swap;
+			return arr
+		}
+		
+	</script>
+
+</body>
+</html>
