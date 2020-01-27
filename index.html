@@ -58,16 +58,16 @@
 					var time = Date.now();
 					Print(QuickSort(myArray));
 					total += Date.now() - time;
-					document.getElementById("time").innerHTML = "<b>Quick</b> sorting test " + (i + 1) + "/500 : <b>" + total / (i + 1) + "ms</b>";
 				}
 
 				else if (document.getElementById("decrease").checked){
 					var time = Date.now();
 					Print(DecreaseSort(myArray));
 					total += Date.now() - time;
-					document.getElementById("time").innerHTML = "<b>Decrease</b> sorting test " + (i + 1) + "/500 : <b>" + total / (i + 1) + "ms</b>";
 				}
 			}
+
+			document.getElementById("time").innerHTML = "<b>Quick</b> sorting test 500/500 : <b>" + total / 500 + "ms</b>";
 		}
 
 		function QuickSort(arr){
