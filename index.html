@@ -11,6 +11,7 @@
         <input type="button" value="Generate" onclick="Generate()">
         <label><input name="radio" type="radio" id="quick" checked>Quick</label>
         <label><input name="radio" type="radio" id="decrease">Decrease</label>
+        <label><input name="radio" type="radio" id="doubleDecrease">Double decrease</label>
         <input type="button" value="Sort" onclick="Sort()">
         <span id="time">Sorting test 0/500 : <b>0ms</b></span>
         <input type="button" value="Speed average" onclick="Test()">
@@ -46,9 +47,18 @@
 				Print(QuickSort(myArray));
 			else if (document.getElementById("decrease").checked)
 				Print(DecreaseSort(myArray));
+			else if (document.getElementById("doubleDecrease").checked)
+				Print(DoubleDecreaseSort(myArray));
 		}
 
 		function Test(){
+
+			var sortType = "Quick";
+
+			if (document.getElementById("decrease").checked)
+					sortType = "Decrease";
+			else if (document.getElementById("doubleDecrease").checked)
+					sortType = "DoubleDecrease";
 
 			for (var i = 0, total = 0, moyenne = 0; i < 500; i++) 
 			{
@@ -65,9 +75,15 @@
 					Print(DecreaseSort(myArray));
 					total += Date.now() - time;
 				}
+
+				else if (document.getElementById("doubleDecrease").checked){
+					var time = Date.now();
+					Print(DoubleDecreaseSort(myArray));
+					total += Date.now() - time;
+				}
 			}
 
-			document.getElementById("time").innerHTML = "<b>Quick</b> sorting test 500/500 : <b>" + total / 500 + "ms</b>";
+			document.getElementById("time").innerHTML = "<b>" + sortType + "</b> sorting test 500/500 : <b>" + total / 500 + "ms</b>";
 		}
 
 		function QuickSort(arr){
@@ -95,24 +111,53 @@
 			if (arr.length <= 0) return arr; // Si le tableau est vide
 
 			else {
-				var min = max = arr[start]; // initialiser min et max avec le 1er element
-				var i_min = i_max = start;  // initialiser leurs indexs avec l'index du 1er element
+				var min = max = start;  // initialiser les positions du min et max avec le 1er element
 
 				for (var i = start; i <= end; i++) { // Chaque appel sur cette fonction, start et end s'approche du centre pour diminuer l'espace de recherche
-					if (arr[i] <= min){	// Si on obtiens un element plus petit
-						min = arr[i]; // On le prend comme le nouveau min
-						i_min = i; // Obtenir sa position
+					if (arr[i] < arr[min])	// Si on obtiens un element plus petit
+						min = i; // Obtenir la position du min
+
+					else if (arr[i] > arr[max]) // Même chose avec les max
+						max = i;
+				}
+
+				Swap(arr, start, min); // On echange dans l'arr les min avec le 1er element par indexes
+				Swap(arr, end, max);   // On echange dans l'arr les max avec le dernier element par indexes
+
+				if (start < Math.floor(arr.length / 2) && end > Math.floor(arr.length / 2)) // Si on est pas encore dans le milieu
+					DecreaseSort(arr, ++start, --end); // Appel recursive de la fonction en diminuant l'espace de recherche
+
+				return arr;
+			}
+		}
+
+		function DoubleDecreaseSort(arr, start = 0, end = arr.length - 1){
+			if (arr.length <= 0) return arr; // Si le tableau est vide
+
+			else {
+				var min = min2 = max = max2 = start; // initialiser les positions des min et des max avec le 1er element
+				var minChanged = maxChanged = false;
+
+				for (var i = start; i <= end; i++) { // Chaque appel sur cette fonction, start et end s'approche du centre pour diminuer l'espace de recherche
+					if (arr[i] < arr[min]){	// Si on obtiens un element plus petit
+						minChanged = true;
+						min2 = min;
+						min = i; // On prend sa position comme le nouveau min
 					}
 
-					else if (arr[i] >= max){ // Même chose avec les max
-						max = arr[i];
-						i_max = i;
+					else if (arr[i] > arr[max]){ // Même chose avec les max
+						maxChanged = true;
+						max2 = max;
+						max = i;
 					}
 				}
 
-				Swap(arr, start, i_min); // On echange dans l'arr le min avec le 1er element
-				Swap(arr, end, i_max);   // On echange dans l'arr le max avec le dernier element
-
+				Swap(arr, start, min); // On echange dans l'arr le min avec le 1er element
+				if (minChanged) Swap(arr, ++start, min2)
+				
+				Swap(arr, end, max);   // On echange dans l'arr le max avec le dernier element
+				if (maxChanged) Swap(arr, --end, max2)
+				
 				if (start < Math.floor(arr.length / 2) && end > Math.floor(arr.length / 2)) // Si on est pas encore dans le milieu
 					DecreaseSort(arr, ++start, --end); // Appel recursive de la fonction en diminuant l'espace de recherche
 
